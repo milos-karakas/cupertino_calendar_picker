@@ -2,13 +2,15 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
+import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker.dart';
+import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker_decoration.dart';
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CupertinoCalendarPicker extends StatefulWidget {
   const CupertinoCalendarPicker({
-    required this.initialMonth,
+    required this.initialDate,
     required this.currentDateTime,
     required this.minimumDateTime,
     required this.maximumDateTime,
@@ -21,6 +23,7 @@ class CupertinoCalendarPicker extends StatefulWidget {
     required this.onYearPickerChanged,
     required this.weekdayDecoration,
     required this.monthPickerDecoration,
+    required this.weekPickerDecoration,
     required this.headerDecoration,
     required this.mainColor,
     required this.mode,
@@ -33,7 +36,7 @@ class CupertinoCalendarPicker extends StatefulWidget {
     super.key,
   });
 
-  final DateTime initialMonth;
+  final DateTime initialDate;
   final DateTime currentDateTime;
   final DateTime minimumDateTime;
   final DateTime maximumDateTime;
@@ -45,6 +48,7 @@ class CupertinoCalendarPicker extends StatefulWidget {
   final ValueChanged<DateTime> onYearPickerChanged;
   final CalendarWeekdayDecoration weekdayDecoration;
   final CalendarMonthPickerDecoration monthPickerDecoration;
+  final CalendarWeekPickerDecoration weekPickerDecoration;
   final CalendarHeaderDecoration headerDecoration;
   final CalendarFooterDecoration footerDecoration;
   final Color mainColor;
@@ -61,9 +65,9 @@ class CupertinoCalendarPicker extends StatefulWidget {
 }
 
 class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
-  late DateTime _currentMonth;
+  late DateTime _currentDate;
   late DateTime _selectedDateTime;
-  late PageController _monthPageController;
+  late PageController _pageController;
   late CupertinoCalendarViewMode _previousViewMode;
   late CupertinoCalendarViewMode _viewMode;
   late GlobalKey<CustomCupertinoDatePickerDateTimeState> _timePickerKey;
@@ -78,12 +82,24 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   @override
   void initState() {
     super.initState();
-    _currentMonth = widget.initialMonth;
-    final int monthDelta = DateUtils.monthDelta(
-      widget.minimumDateTime,
-      _currentMonth,
-    );
-    _monthPageController = PageController(initialPage: monthDelta);
+    _currentDate = widget.initialDate;
+
+    final int delta = switch (widget.mode) {
+      CupertinoCalendarMode.date ||
+      CupertinoCalendarMode.dateTime =>
+        DateUtils.monthDelta(
+          widget.minimumDateTime,
+          _currentDate,
+        ),
+      CupertinoCalendarMode.dateWeek ||
+      CupertinoCalendarMode.dateTimeWeek =>
+        PackageDateUtils.weekDelta(
+          widget.minimumDateTime,
+          _currentDate,
+        ),
+    };
+
+    _pageController = PageController(initialPage: delta);
     _previousViewMode = CupertinoCalendarViewMode.monthPicker;
     _viewMode = CupertinoCalendarViewMode.monthPicker;
     _selectedDateTime = widget.selectedDateTime;
@@ -93,12 +109,12 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   @override
   void didUpdateWidget(CupertinoCalendarPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final DateTime initialMonth = widget.initialMonth;
-    final DateTime oldInitialMonth = oldWidget.initialMonth;
-    if (initialMonth != oldInitialMonth && initialMonth != _currentMonth) {
+    final DateTime initialMonth = widget.initialDate;
+    final DateTime oldInitialMonth = oldWidget.initialDate;
+    if (initialMonth != oldInitialMonth && initialMonth != _currentDate) {
       // We can't interrupt this widget build with a scroll, so do it next frame
       WidgetsBinding.instance.addPostFrameCallback(
-        (Duration timeStamp) => _showMonth(widget.initialMonth, jump: true),
+        (Duration timeStamp) => _showMonth(widget.initialDate, jump: true),
       );
     }
 
@@ -110,7 +126,7 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   /// Earliest allowable month.
   bool get _isDisplayingFirstMonth {
     final DateTime minimumDate = widget.minimumDateTime;
-    return !_currentMonth.isAfter(
+    return !_currentDate.isAfter(
       DateTime(minimumDate.year, minimumDate.month),
     );
   }
@@ -118,9 +134,22 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   /// Latest allowable month.
   bool get _isDisplayingLastMonth {
     final DateTime maximumDate = widget.maximumDateTime;
-    return !_currentMonth.isBefore(
+    return !_currentDate.isBefore(
       DateTime(maximumDate.year, maximumDate.month),
     );
+  }
+
+  /// Earliest allowable week.
+  bool get _isDisplayingFirstWeek {
+    final DateTime minimumDate = widget.minimumDateTime;
+    return _currentDate.isSameWeekAs(minimumDate);
+  }
+
+  /// Latest allowable week.
+  bool get _isDisplayingLastWeek {
+    final DateTime maximumDate = widget.maximumDateTime;
+    print('is displaying last week: ${_currentDate.isSameWeekAs(maximumDate)}');
+    return _currentDate.isSameWeekAs(maximumDate);
   }
 
   void _handleMonthPageChanged(int monthPage) {
@@ -129,17 +158,30 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
       final DateTime monthDate =
           DateUtils.addMonthsToMonthDate(minimumDate, monthPage);
       final bool isCurrentMonth =
-          DateUtils.isSameMonth(_currentMonth, monthDate);
+          DateUtils.isSameMonth(_currentDate, monthDate);
       if (!isCurrentMonth) {
-        _currentMonth = DateTime(monthDate.year, monthDate.month);
-        widget.onDisplayedMonthChanged(_currentMonth);
+        _currentDate = DateTime(monthDate.year, monthDate.month);
+        widget.onDisplayedMonthChanged(_currentDate);
+      }
+    });
+  }
+
+  void _handleWeekPageChanged(int weekPage) {
+    setState(() {
+      final DateTime minimumDate = widget.minimumDateTime;
+      final DateTime weekDate =
+          DateUtils.addDaysToDate(minimumDate, weekPage * 7);
+      final bool isCurrentWeek = _currentDate.isSameWeekAs(weekDate);
+      if (!isCurrentWeek) {
+        _currentDate = DateTime(weekDate.year, weekDate.month, weekDate.day);
+        widget.onDisplayedMonthChanged(_currentDate);
       }
     });
   }
 
   void _handleNextMonth() {
     if (!_isDisplayingLastMonth) {
-      _monthPageController.nextPage(
+      _pageController.nextPage(
         duration: monthScrollDuration,
         curve: Curves.ease,
       );
@@ -148,19 +190,55 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
 
   void _handlePreviousMonth() {
     if (!_isDisplayingFirstMonth) {
-      _monthPageController.previousPage(
+      _pageController.previousPage(
         duration: monthScrollDuration,
         curve: Curves.ease,
       );
     }
   }
 
+  void _handleNextWeek() {
+    if (!_isDisplayingLastWeek) {
+      _pageController.nextPage(
+        duration: monthScrollDuration,
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  void _handlePreviousWeek() {
+    if (!_isDisplayingFirstWeek) {
+      _pageController.previousPage(
+        duration: monthScrollDuration,
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  VoidCallback? get _nextChevronCallback => switch (widget.mode) {
+        CupertinoCalendarMode.date ||
+        CupertinoCalendarMode.dateTime =>
+          _isDisplayingLastMonth ? null : _handleNextMonth,
+        CupertinoCalendarMode.dateWeek ||
+        CupertinoCalendarMode.dateTimeWeek =>
+          _isDisplayingLastWeek ? null : _handleNextWeek
+      };
+
+  VoidCallback? get _previousChevronCallback => switch (widget.mode) {
+        CupertinoCalendarMode.date ||
+        CupertinoCalendarMode.dateTime =>
+          _isDisplayingFirstMonth ? null : _handlePreviousMonth,
+        CupertinoCalendarMode.dateWeek ||
+        CupertinoCalendarMode.dateTimeWeek =>
+          _isDisplayingFirstWeek ? null : _handlePreviousWeek
+      };
+
   void _showMonth(DateTime month, {bool jump = false}) {
     final int monthPage = DateUtils.monthDelta(widget.minimumDateTime, month);
     if (jump) {
-      _monthPageController.jumpToPage(monthPage);
+      _pageController.jumpToPage(monthPage);
     } else {
-      _monthPageController.animateToPage(
+      _pageController.animateToPage(
         monthPage,
         duration: monthScrollDuration,
         curve: Curves.ease,
@@ -192,7 +270,7 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
     widget.onYearPickerChanged(date);
   }
 
-  void _onMonthDateChanged(DateTime dateTime) {
+  void _onDateChanged(DateTime dateTime) {
     _selectedDateTime = _selectedDateTime.copyWith(
       year: dateTime.year,
       month: dateTime.month,
@@ -250,11 +328,10 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
           const SizedBox(height: 13.0),
           CupertinoPickerAnimatedCrossFade(
             firstChild: CalendarHeader(
-              currentMonth: _currentMonth,
-              onNextMonthIconTapped:
-                  _isDisplayingLastMonth ? null : _handleNextMonth,
-              onPreviousMonthIconTapped:
-                  _isDisplayingFirstMonth ? null : _handlePreviousMonth,
+              mode: widget.mode,
+              currentMonth: _currentDate,
+              onNextSegmentIconTapped: _nextChevronCallback,
+              onPreviousSegmentIconTapped: _previousChevronCallback,
               onYearPickerStateChanged: _toggleYearPicker,
               decoration: widget.headerDecoration,
             ),
@@ -276,20 +353,39 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
                     decoration: widget.weekdayDecoration,
                     firstDayOfWeekIndex: widget.firstDayOfWeekIndex,
                   ),
-                  CalendarMonthPicker(
-                    monthPageController: _monthPageController,
-                    onMonthPageChanged: _handleMonthPageChanged,
-                    currentDate: widget.currentDateTime,
-                    displayedMonth: _currentMonth,
-                    minimumDate: widget.minimumDateTime,
-                    maximumDate: widget.maximumDateTime,
-                    selectableDayPredicate: widget.selectableDayPredicate,
-                    selectedDate: widget.selectedDateTime,
-                    onChanged: _onMonthDateChanged,
-                    decoration: widget.monthPickerDecoration,
-                    mainColor: widget.mainColor,
-                    firstDayOfWeekIndex: widget.firstDayOfWeekIndex,
-                  ),
+                  switch (widget.mode) {
+                    CupertinoCalendarMode.date ||
+                    CupertinoCalendarMode.dateTime =>
+                      CalendarMonthPicker(
+                        monthPageController: _pageController,
+                        onMonthPageChanged: _handleMonthPageChanged,
+                        currentDate: widget.currentDateTime,
+                        displayedMonth: _currentDate,
+                        minimumDate: widget.minimumDateTime,
+                        maximumDate: widget.maximumDateTime,
+                        selectableDayPredicate: widget.selectableDayPredicate,
+                        selectedDate: widget.selectedDateTime,
+                        onChanged: _onDateChanged,
+                        decoration: widget.monthPickerDecoration,
+                        mainColor: widget.mainColor,
+                        firstDayOfWeekIndex: widget.firstDayOfWeekIndex,
+                      ),
+                    CupertinoCalendarMode.dateWeek ||
+                    CupertinoCalendarMode.dateTimeWeek =>
+                      CalendarWeekPicker(
+                        weekPageController: _pageController,
+                        onWeekPageChanged: _handleWeekPageChanged,
+                        currentDate: widget.currentDateTime,
+                        displayedWeek: _currentDate,
+                        minimumDate: widget.minimumDateTime,
+                        maximumDate: widget.maximumDateTime,
+                        selectedDate: widget.selectedDateTime,
+                        onChanged: _onDateChanged,
+                        decoration: widget.weekPickerDecoration,
+                        mainColor: widget.mainColor,
+                        firstDayOfWeekIndex: widget.firstDayOfWeekIndex,
+                      )
+                  },
                 ],
               ),
               secondChild: Padding(
@@ -312,7 +408,7 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
                       ),
                       mode: CupertinoDatePickerMode.monthYear,
                       onDateTimeChanged: _onYearPickerChanged,
-                      initialDateTime: _currentMonth,
+                      initialDateTime: _currentDate,
                     ),
                   CupertinoCalendarViewMode.timePicker =>
                     CupertinoTimePickerWheel(
@@ -331,7 +427,8 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
               ),
             ),
           ),
-          if (widget.mode == CupertinoCalendarMode.dateTime)
+          if (widget.mode == CupertinoCalendarMode.dateTime ||
+              widget.mode == CupertinoCalendarMode.dateTimeWeek)
             CupertinoPickerAnimatedCrossFade(
               firstChild: CalendarFooter(
                 decoration: widget.footerDecoration,
@@ -362,7 +459,7 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
 
   @override
   void dispose() {
-    _monthPageController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 }

@@ -14,7 +14,6 @@ class CalendarMonthPicker extends StatefulWidget {
   CalendarMonthPicker({
     required this.monthPageController,
     required this.onMonthPageChanged,
-    required DateTime displayedMonth,
     required DateTime currentDate,
     required DateTime minimumDate,
     required DateTime maximumDate,
@@ -28,8 +27,7 @@ class CalendarMonthPicker extends StatefulWidget {
   })  : minimumDate = DateUtils.dateOnly(minimumDate),
         maximumDate = DateUtils.dateOnly(maximumDate),
         currentDate = DateUtils.dateOnly(currentDate),
-        selectedDate = DateUtils.dateOnly(selectedDate),
-        displayedMonth = DateUtils.dateOnly(displayedMonth);
+        selectedDate = DateUtils.dateOnly(selectedDate);
 
   final PageController monthPageController;
   final ValueChanged<int> onMonthPageChanged;
@@ -57,9 +55,6 @@ class CalendarMonthPicker extends StatefulWidget {
   ///
   /// This date must be on or after the [minimumDate].
   final DateTime maximumDate;
-
-  /// The month whose days are displayed by this picker.
-  final DateTime displayedMonth;
 
   /// The decoration class for each day type.
   final CalendarMonthPickerDecoration decoration;

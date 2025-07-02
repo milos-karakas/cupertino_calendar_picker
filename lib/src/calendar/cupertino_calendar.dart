@@ -4,6 +4,7 @@
 
 import 'dart:math';
 
+import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker_decoration.dart';
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class CupertinoCalendar extends StatefulWidget {
     this.onDisplayedMonthChanged,
     this.weekdayDecoration,
     this.monthPickerDecoration,
+    this.weekPickerDecoration,
     this.headerDecoration,
     this.footerDecoration,
     this.timeLabel,
@@ -106,6 +108,9 @@ class CupertinoCalendar extends StatefulWidget {
 
   /// Custom decoration for the month picker view.
   final CalendarMonthPickerDecoration? monthPickerDecoration;
+
+  /// Custom decoration for the week picker view.
+  final CalendarWeekPickerDecoration? weekPickerDecoration;
 
   /// Custom decoration for the header of the calendar.
   final CalendarHeaderDecoration? headerDecoration;
@@ -258,6 +263,8 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
     double height = switch (widget.mode) {
       CupertinoCalendarMode.date => calendarDatePickerHeight,
       CupertinoCalendarMode.dateTime => calendarDateTimePickerHeight,
+      CupertinoCalendarMode.dateWeek => calendarDateWeekPickerHeight,
+      CupertinoCalendarMode.dateTimeWeek => calendarDateTimeWeekPickerHeight,
     };
     final List<CupertinoCalendarAction>? actions = widget.actions;
     final bool withActions = actions != null && actions.isNotEmpty;
@@ -276,7 +283,7 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
         maxWidth: maxWidth,
       ),
       child: CupertinoCalendarPicker(
-        initialMonth: _currentlyDisplayedMonthDate,
+        initialDate: _currentlyDisplayedMonthDate,
         currentDateTime: widget.currentDateTime ?? DateTime.now(),
         minimumDateTime: widget.minimumDateTime,
         maximumDateTime: widget.maximumDateTime,
@@ -292,6 +299,11 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
             CalendarWeekdayDecoration.withDynamicColor(context),
         monthPickerDecoration: widget.monthPickerDecoration ??
             CalendarMonthPickerDecoration.withDynamicColor(
+              context,
+              mainColor: widget.mainColor,
+            ),
+        weekPickerDecoration: widget.weekPickerDecoration ??
+            CalendarWeekPickerDecoration.withDynamicColor(
               context,
               mainColor: widget.mainColor,
             ),

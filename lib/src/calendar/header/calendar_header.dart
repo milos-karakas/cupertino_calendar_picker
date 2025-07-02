@@ -10,17 +10,19 @@ typedef YearPickerCallback = void Function(bool showYearPicker);
 
 class CalendarHeader extends StatefulWidget {
   const CalendarHeader({
+    required this.mode,
     required this.currentMonth,
     required this.onYearPickerStateChanged,
-    required this.onPreviousMonthIconTapped,
-    required this.onNextMonthIconTapped,
+    required this.onPreviousSegmentIconTapped,
+    required this.onNextSegmentIconTapped,
     required this.decoration,
     super.key,
   });
 
+  final CupertinoCalendarMode mode;
   final DateTime currentMonth;
-  final VoidCallback? onPreviousMonthIconTapped;
-  final VoidCallback? onNextMonthIconTapped;
+  final VoidCallback? onPreviousSegmentIconTapped;
+  final VoidCallback? onNextSegmentIconTapped;
   final YearPickerCallback onYearPickerStateChanged;
   final CalendarHeaderDecoration decoration;
 
@@ -32,8 +34,8 @@ class _CalendarHeaderState extends State<CalendarHeader> {
   bool _showYearPicker = false;
 
   CalendarHeaderDecoration get _decoration => widget.decoration;
-  bool get _isBackwardDisabled => widget.onPreviousMonthIconTapped == null;
-  bool get _isForwardDisabled => widget.onNextMonthIconTapped == null;
+  bool get _isBackwardDisabled => widget.onPreviousSegmentIconTapped == null;
+  bool get _isForwardDisabled => widget.onNextSegmentIconTapped == null;
 
   void _handleYearPickerStateChange() {
     setState(() {
@@ -67,20 +69,25 @@ class _CalendarHeaderState extends State<CalendarHeader> {
                 child: Text(headerString),
               ),
               SizedBox(width: 5.0.scale(context)),
-              AnimatedRotation(
-                duration: innerPickersFadeDuration,
-                curve: Curves.easeInOut,
-                turns: _showYearPicker ? 1.25 : 1.0,
-                child: SizedBox(
-                  width: 11.0.scale(context),
-                  height: 22.0.scale(context),
-                  child: Icon(
-                    CupertinoIcons.chevron_forward,
-                    color: _decoration.monthDateArrowColor,
-                    size: calendarMonthPickerIconSize.scale(context),
+              switch (widget.mode) {
+                CupertinoCalendarMode.date ||
+                CupertinoCalendarMode.dateTime =>
+                  AnimatedRotation(
+                    duration: innerPickersFadeDuration,
+                    curve: Curves.easeInOut,
+                    turns: _showYearPicker ? 1.25 : 1.0,
+                    child: SizedBox(
+                      width: 11.0.scale(context),
+                      height: 22.0.scale(context),
+                      child: Icon(
+                        CupertinoIcons.chevron_forward,
+                        color: _decoration.monthDateArrowColor,
+                        size: calendarMonthPickerIconSize.scale(context),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                _ => const SizedBox(),
+              },
             ],
           ),
         ),
@@ -92,7 +99,7 @@ class _CalendarHeaderState extends State<CalendarHeader> {
             children: <Widget>[
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: widget.onPreviousMonthIconTapped,
+                onTap: widget.onPreviousSegmentIconTapped,
                 child: SizedBox(
                   height: calendarMonthSwitcherSize,
                   width: calendarMonthSwitcherSize,
@@ -108,7 +115,7 @@ class _CalendarHeaderState extends State<CalendarHeader> {
               SizedBox(width: 2.0.scale(context)),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: widget.onNextMonthIconTapped,
+                onTap: widget.onNextSegmentIconTapped,
                 child: SizedBox(
                   height: calendarMonthSwitcherSize,
                   width: calendarMonthSwitcherSize,
