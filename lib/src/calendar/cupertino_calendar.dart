@@ -196,7 +196,7 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
   void _initializeInitialDate() {
     final DateTime initialDateTime = widget.initialDateTime ?? DateTime.now();
     _currentlyDisplayedMonthDate =
-        PackageDateUtils.monthDateOnly(initialDateTime);
+        widget.mode == CupertinoCalendarMode.date || widget.mode == CupertinoCalendarMode.dateTime ? PackageDateUtils.monthDateOnly(initialDateTime) : PackageDateUtils.dayMonthYearOnly(initialDateTime);
     _selectedDateTime = initialDateTime;
   }
 

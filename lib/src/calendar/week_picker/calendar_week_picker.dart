@@ -160,7 +160,7 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
 
   @override
   Widget build(BuildContext context) {
-    /// [+ 1] to include the last month
+    /// [+ 1] to include the last week
     final int itemCount = PackageDateUtils.weekDelta(
           widget.minimumDate,
           widget.maximumDate,

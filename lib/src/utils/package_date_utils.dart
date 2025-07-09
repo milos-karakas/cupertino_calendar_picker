@@ -7,6 +7,10 @@ abstract final class PackageDateUtils {
     return DateTime(date.year, date.month);
   }
 
+  static DateTime dayMonthYearOnly(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
   static int firstDayOffset(
     int year,
     int month,
@@ -38,7 +42,7 @@ abstract final class PackageDateUtils {
     final int newFirstDayOfWeekIndex = (firstDayOfWeekIndex - 1) % 7;
 
     // Number of days between the first day of week appearing on the calendar,
-    // and the day corresponding to the first of the month.
+    // and the day corresponding to the first day of the week.
     return (weekdayFromMonday - newFirstDayOfWeekIndex) % 7;
   }
 

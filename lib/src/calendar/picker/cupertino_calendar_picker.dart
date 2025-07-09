@@ -102,8 +102,8 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
     _pageController = PageController(initialPage: delta);
     _previousViewMode = CupertinoCalendarViewMode.monthPicker;
     _viewMode = CupertinoCalendarViewMode.monthPicker;
-    _selectedDateTime = widget.selectedDateTime;
     _timePickerKey = GlobalKey();
+    _selectedDateTime = widget.selectedDateTime;
   }
 
   @override
@@ -114,7 +114,14 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
     if (initialMonth != oldInitialMonth && initialMonth != _currentDate) {
       // We can't interrupt this widget build with a scroll, so do it next frame
       WidgetsBinding.instance.addPostFrameCallback(
-        (Duration timeStamp) => _showMonth(widget.initialDate, jump: true),
+        (Duration timeStamp) => switch (widget.mode) {
+          CupertinoCalendarMode.date ||
+          CupertinoCalendarMode.dateTime =>
+            _showMonth(widget.initialDate, jump: true),
+          CupertinoCalendarMode.dateWeek ||
+          CupertinoCalendarMode.dateTimeWeek =>
+            _showWeek(widget.initialDate, jump: true),
+        },
       );
     }
 
@@ -148,7 +155,6 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   /// Latest allowable week.
   bool get _isDisplayingLastWeek {
     final DateTime maximumDate = widget.maximumDateTime;
-    print('is displaying last week: ${_currentDate.isSameWeekAs(maximumDate)}');
     return _currentDate.isSameWeekAs(maximumDate);
   }
 
@@ -240,6 +246,22 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
     } else {
       _pageController.animateToPage(
         monthPage,
+        duration: monthScrollDuration,
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  void _showWeek(DateTime week, {bool jump = false}) {
+    final int weekPage = PackageDateUtils.weekDelta(
+      widget.minimumDateTime,
+      week,
+    ) + 1;
+    if (jump) {
+      _pageController.jumpToPage(weekPage);
+    } else {
+      _pageController.animateToPage(
+        weekPage,
         duration: monthScrollDuration,
         curve: Curves.ease,
       );
