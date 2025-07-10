@@ -5,16 +5,16 @@
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/cupertino.dart';
 
-/// A decoration class for the calendar's month picker.
+/// A decoration class for the calendar's week picker.
 class CalendarWeekPickerDecoration {
-  /// Creates a calendar's month picker decoration class with default values
+  /// Creates a calendar's week picker decoration class with default values
   /// for non-provided parameters.
   factory CalendarWeekPickerDecoration({
-    CalendarMonthPickerDefaultDayStyle? defaultDayStyle,
-    CalendarMonthPickerCurrentDayStyle? currentDayStyle,
-    CalendarMonthPickerSelectedDayStyle? selectedDayStyle,
-    CalendarMonthPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
-    CalendarMonthPickerDisabledDayStyle? disabledDayStyle,
+    CalendarPickerDefaultDayStyle? defaultDayStyle,
+    CalendarPickerCurrentDayStyle? currentDayStyle,
+    CalendarPickerSelectedDayStyle? selectedDayStyle,
+    CalendarPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
+    CalendarPickerDisabledDayStyle? disabledDayStyle,
   }) {
     return CalendarWeekPickerDecoration._(
       defaultDayStyle: defaultDayStyle,
@@ -33,7 +33,7 @@ class CalendarWeekPickerDecoration {
     this.disabledDayStyle,
   });
 
-  /// Creates a calendar's month picker decoration class with default values
+  /// Creates a calendar's week picker decoration class with default values
   /// for non-provided parameters.
   ///
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
@@ -42,64 +42,64 @@ class CalendarWeekPickerDecoration {
   factory CalendarWeekPickerDecoration.withDynamicColor(
       BuildContext context, {
         Color? mainColor,
-        CalendarMonthPickerDefaultDayStyle? defaultDayStyle,
-        CalendarMonthPickerCurrentDayStyle? currentDayStyle,
-        CalendarMonthPickerSelectedDayStyle? selectedDayStyle,
-        CalendarMonthPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
-        CalendarMonthPickerDisabledDayStyle? disabledDayStyle,
+        CalendarPickerDefaultDayStyle? defaultDayStyle,
+        CalendarPickerCurrentDayStyle? currentDayStyle,
+        CalendarPickerSelectedDayStyle? selectedDayStyle,
+        CalendarPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
+        CalendarPickerDisabledDayStyle? disabledDayStyle,
       }) {
     return CalendarWeekPickerDecoration(
       defaultDayStyle: defaultDayStyle ??
-          CalendarMonthPickerDefaultDayStyle.withDynamicColor(context),
+          CalendarPickerDefaultDayStyle.withDynamicColor(context),
       currentDayStyle: currentDayStyle ??
-          CalendarMonthPickerCurrentDayStyle.withDynamicColor(
+          CalendarPickerCurrentDayStyle.withDynamicColor(
             context,
             mainColor: mainColor,
           ),
       disabledDayStyle: disabledDayStyle ??
-          CalendarMonthPickerDisabledDayStyle.withDynamicColor(
+          CalendarPickerDisabledDayStyle.withDynamicColor(
             context,
           ),
       selectedDayStyle: selectedDayStyle ??
-          CalendarMonthPickerSelectedDayStyle.withDynamicColor(
+          CalendarPickerSelectedDayStyle.withDynamicColor(
             context,
             mainColor: mainColor,
           ),
       selectedCurrentDayStyle: selectedCurrentDayStyle ??
-          CalendarMonthPickerSelectedCurrentDayStyle.withDynamicColor(
+          CalendarPickerSelectedCurrentDayStyle.withDynamicColor(
             context,
             mainColor: mainColor,
           ),
     );
   }
 
-  /// The [CalendarMonthPickerDefaultDayStyle] of the
-  /// calendar's month picker default day.
-  final CalendarMonthPickerDefaultDayStyle? defaultDayStyle;
+  /// The [CalendarPickerDefaultDayStyle] of the
+  /// calendar's week picker default day.
+  final CalendarPickerDefaultDayStyle? defaultDayStyle;
 
-  /// The [CalendarMonthPickerCurrentDayStyle] of the
-  /// calendar's month picker current day.
-  final CalendarMonthPickerCurrentDayStyle? currentDayStyle;
+  /// The [CalendarPickerCurrentDayStyle] of the
+  /// calendar's week picker current day.
+  final CalendarPickerCurrentDayStyle? currentDayStyle;
 
-  /// The [CalendarMonthPickerSelectedDayStyle] of the
-  /// calendar's month picker selected day.
-  final CalendarMonthPickerSelectedDayStyle? selectedDayStyle;
+  /// The [CalendarPickerSelectedDayStyle] of the
+  /// calendar's week picker selected day.
+  final CalendarPickerSelectedDayStyle? selectedDayStyle;
 
-  /// The [CalendarMonthPickerSelectedCurrentDayStyle] of the
-  /// calendar's month picker selected current day.
-  final CalendarMonthPickerSelectedCurrentDayStyle? selectedCurrentDayStyle;
+  /// The [CalendarPickerSelectedCurrentDayStyle] of the
+  /// calendar's week picker selected current day.
+  final CalendarPickerSelectedCurrentDayStyle? selectedCurrentDayStyle;
 
-  /// The [CalendarMonthPickerDisabledDayStyle] of the
-  /// calendar's month picker disabled day.
-  final CalendarMonthPickerDisabledDayStyle? disabledDayStyle;
+  /// The [CalendarPickerDisabledDayStyle] of the
+  /// calendar's week picker disabled day.
+  final CalendarPickerDisabledDayStyle? disabledDayStyle;
 
   /// Creates a copy of the class with the provided parameters.
   CalendarWeekPickerDecoration copyWith({
-    CalendarMonthPickerDefaultDayStyle? defaultDayStyle,
-    CalendarMonthPickerCurrentDayStyle? currentDayStyle,
-    CalendarMonthPickerSelectedDayStyle? selectedDayStyle,
-    CalendarMonthPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
-    CalendarMonthPickerDisabledDayStyle? disabledDayStyle,
+    CalendarPickerDefaultDayStyle? defaultDayStyle,
+    CalendarPickerCurrentDayStyle? currentDayStyle,
+    CalendarPickerSelectedDayStyle? selectedDayStyle,
+    CalendarPickerSelectedCurrentDayStyle? selectedCurrentDayStyle,
+    CalendarPickerDisabledDayStyle? disabledDayStyle,
   }) {
     return CalendarWeekPickerDecoration(
       defaultDayStyle: defaultDayStyle ?? defaultDayStyle,

@@ -104,7 +104,7 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
     }
 
     for (int weekDay = 0; weekDay < 7; weekDay++) {
-      late CalendarMonthPickerDayStyle style;
+      late CalendarPickerDayStyle style;
 
       final DateTime date = DateUtils.addDaysToDate(
         DateTime(weekDate.year, weekDate.month, weekDate.day),
@@ -122,33 +122,33 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
 
       if (isDisabledDay) {
         style = decoration.disabledDayStyle ??
-            CalendarMonthPickerDisabledDayStyle.withDynamicColor(context);
+            CalendarPickerDisabledDayStyle.withDynamicColor(context);
       } else if (isCurrentDay) {
         style = decoration.currentDayStyle ??
-            CalendarMonthPickerCurrentDayStyle.withDynamicColor(
+            CalendarPickerCurrentDayStyle.withDynamicColor(
               context,
               mainColor: widget.mainColor,
             );
 
         if (isSelectedDay) {
           style = decoration.selectedCurrentDayStyle ??
-              CalendarMonthPickerSelectedCurrentDayStyle.withDynamicColor(
+              CalendarPickerSelectedCurrentDayStyle.withDynamicColor(
                 context,
                 mainColor: widget.mainColor,
               );
         }
       } else if (isSelectedDay) {
         style = decoration.selectedDayStyle ??
-            CalendarMonthPickerSelectedDayStyle.withDynamicColor(
+            CalendarPickerSelectedDayStyle.withDynamicColor(
               context,
               mainColor: widget.mainColor,
             );
       } else {
         style = decoration.defaultDayStyle ??
-            CalendarMonthPickerDefaultDayStyle.withDynamicColor(context);
+            CalendarPickerDefaultDayStyle.withDynamicColor(context);
       }
 
-      final Widget dayWidget = CalendarMonthPickerDay(
+      final Widget dayWidget = CalendarPickerDay(
         dayDate: date,
         onDaySelected: isDisabledDay ? null : widget.onChanged,
         style: style,

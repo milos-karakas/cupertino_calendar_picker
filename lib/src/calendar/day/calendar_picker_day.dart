@@ -7,8 +7,8 @@ import 'dart:ui';
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/material.dart';
 
-class CalendarMonthPickerDay extends StatelessWidget {
-  const CalendarMonthPickerDay({
+class CalendarPickerDay extends StatelessWidget {
+  const CalendarPickerDay({
     required this.dayDate,
     required this.style,
     required this.backgroundCircleSize,
@@ -17,24 +17,24 @@ class CalendarMonthPickerDay extends StatelessWidget {
   });
 
   final DateTime dayDate;
-  final CalendarMonthPickerDayStyle style;
+  final CalendarPickerDayStyle style;
   final double backgroundCircleSize;
   final ValueChanged<DateTime>? onDaySelected;
 
   @override
   Widget build(BuildContext context) {
-    final CalendarMonthPickerDayStyle dayStyle = style;
+    final CalendarPickerDayStyle dayStyle = style;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onDaySelected != null ? () => onDaySelected?.call(dayDate) : null,
       child: CustomPaint(
-        painter: CalendarMonthPickerDayPainter(
+        painter: CalendarPickerDayPainter(
           day: '${dayDate.day}',
           textScaler: context.textScaler,
           style: style.textStyle,
           backgroundCircleColor:
-              dayStyle is CalendarMonthPickerBackgroundCircledDayStyle
+              dayStyle is CalendarPickerBackgroundCircledDayStyle
                   ? dayStyle.backgroundCircleColor
                   : null,
           backgroundCircleSize: backgroundCircleSize,
@@ -44,8 +44,8 @@ class CalendarMonthPickerDay extends StatelessWidget {
   }
 }
 
-class CalendarMonthPickerDayPainter extends CustomPainter {
-  const CalendarMonthPickerDayPainter({
+class CalendarPickerDayPainter extends CustomPainter {
+  const CalendarPickerDayPainter({
     required this.day,
     required this.textScaler,
     required this.style,
@@ -92,8 +92,8 @@ class CalendarMonthPickerDayPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    final CalendarMonthPickerDayPainter oldPainter =
-        oldDelegate as CalendarMonthPickerDayPainter;
+    final CalendarPickerDayPainter oldPainter =
+        oldDelegate as CalendarPickerDayPainter;
     return style != oldPainter.style ||
         backgroundCircleColor != oldPainter.backgroundCircleColor ||
         day != oldPainter.day ||

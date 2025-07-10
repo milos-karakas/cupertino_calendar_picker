@@ -4,30 +4,30 @@
 
 import 'package:flutter/cupertino.dart';
 
-const CupertinoDynamicColor calendarMonthPickerDisabledDayColor =
+const CupertinoDynamicColor calendarPickerDisabledDayColor =
     CupertinoColors.tertiaryLabel;
-const TextStyle calendarMonthPickerDisabledDayStyle = TextStyle(
+const TextStyle calendarPickerDisabledDayStyle = TextStyle(
   fontSize: 20.0,
-  color: calendarMonthPickerDisabledDayColor,
+  color: calendarPickerDisabledDayColor,
   fontWeight: FontWeight.w400,
   letterSpacing: -0.4,
 );
 
-const CupertinoDynamicColor calendarMonthPickerDefaultDayColor =
+const CupertinoDynamicColor calendarPickerDefaultDayColor =
     CupertinoColors.label;
-const TextStyle calendarMonthPickerDefaultDayStyle = TextStyle(
+const TextStyle calendarPickerDefaultDayStyle = TextStyle(
   fontSize: 20.0,
-  color: calendarMonthPickerDefaultDayColor,
+  color: calendarPickerDefaultDayColor,
   fontWeight: FontWeight.w400,
   letterSpacing: -0.4,
 );
 
-const TextStyle calendarMonthPickerSelectedDayStyle = TextStyle(
+const TextStyle calendarPickerSelectedDayStyle = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.w500,
 );
 
-final TextStyle calendarMonthPickerSelectedCurrentDayStyle = TextStyle(
+final TextStyle calendarPickerSelectedCurrentDayStyle = TextStyle(
   fontSize: 20.0,
   color: CupertinoDynamicColor.withBrightness(
     color: CupertinoColors.label.darkColor,
@@ -36,15 +36,15 @@ final TextStyle calendarMonthPickerSelectedCurrentDayStyle = TextStyle(
   fontWeight: FontWeight.w500,
 );
 
-const TextStyle calendarMonthPickerCurrentDayStyle = TextStyle(
+const TextStyle calendarPickerCurrentDayStyle = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.w400,
   letterSpacing: -0.4,
 );
 
 /// A base decoration class for the calendar's month picker day.
-abstract class CalendarMonthPickerDayStyle {
-  const CalendarMonthPickerDayStyle({
+abstract class CalendarPickerDayStyle {
+  const CalendarPickerDayStyle({
     required this.textStyle,
   });
 
@@ -53,9 +53,9 @@ abstract class CalendarMonthPickerDayStyle {
 }
 
 /// A base decoration class for the calendar's month picker background circled day.
-abstract class CalendarMonthPickerBackgroundCircledDayStyle
-    extends CalendarMonthPickerDayStyle {
-  const CalendarMonthPickerBackgroundCircledDayStyle({
+abstract class CalendarPickerBackgroundCircledDayStyle
+    extends CalendarPickerDayStyle {
+  const CalendarPickerBackgroundCircledDayStyle({
     required super.textStyle,
     required this.backgroundCircleColor,
   });
@@ -65,18 +65,18 @@ abstract class CalendarMonthPickerBackgroundCircledDayStyle
 }
 
 /// A decoration class for the calendar's month picker disabled day.
-class CalendarMonthPickerDisabledDayStyle extends CalendarMonthPickerDayStyle {
+class CalendarPickerDisabledDayStyle extends CalendarPickerDayStyle {
   /// Creates a calendar's month picker disabled day decoration class
   /// with default values for non-provided parameters.
-  factory CalendarMonthPickerDisabledDayStyle({
+  factory CalendarPickerDisabledDayStyle({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerDisabledDayStyle._(
-      textStyle: textStyle ?? calendarMonthPickerDisabledDayStyle,
+    return CalendarPickerDisabledDayStyle._(
+      textStyle: textStyle ?? calendarPickerDisabledDayStyle,
     );
   }
 
-  const CalendarMonthPickerDisabledDayStyle._({
+  const CalendarPickerDisabledDayStyle._({
     required super.textStyle,
   });
 
@@ -84,15 +84,15 @@ class CalendarMonthPickerDisabledDayStyle extends CalendarMonthPickerDayStyle {
   /// with default values for non-provided parameters.
   ///
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
-  factory CalendarMonthPickerDisabledDayStyle.withDynamicColor(
+  factory CalendarPickerDisabledDayStyle.withDynamicColor(
     BuildContext context, {
     TextStyle? textStyle,
   }) {
-    final TextStyle style = textStyle ?? calendarMonthPickerDisabledDayStyle;
-    return CalendarMonthPickerDisabledDayStyle(
+    final TextStyle style = textStyle ?? calendarPickerDisabledDayStyle;
+    return CalendarPickerDisabledDayStyle(
       textStyle: style.copyWith(
         color: CupertinoDynamicColor.resolve(
-          style.color ?? calendarMonthPickerDisabledDayColor,
+          style.color ?? calendarPickerDisabledDayColor,
           context,
         ),
       ),
@@ -100,28 +100,28 @@ class CalendarMonthPickerDisabledDayStyle extends CalendarMonthPickerDayStyle {
   }
 
   /// Creates a copy of the class with the provided parameters.
-  CalendarMonthPickerDisabledDayStyle? copyWith({
+  CalendarPickerDisabledDayStyle? copyWith({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerDisabledDayStyle(
+    return CalendarPickerDisabledDayStyle(
       textStyle: textStyle ?? this.textStyle,
     );
   }
 }
 
 /// A decoration class for the calendar's month picker default day.
-class CalendarMonthPickerDefaultDayStyle extends CalendarMonthPickerDayStyle {
+class CalendarPickerDefaultDayStyle extends CalendarPickerDayStyle {
   /// Creates a calendar's month picker default day decoration class
   /// with default values for non-provided parameters.
-  factory CalendarMonthPickerDefaultDayStyle({
+  factory CalendarPickerDefaultDayStyle({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerDefaultDayStyle._(
-      textStyle: textStyle ?? calendarMonthPickerDefaultDayStyle,
+    return CalendarPickerDefaultDayStyle._(
+      textStyle: textStyle ?? calendarPickerDefaultDayStyle,
     );
   }
 
-  const CalendarMonthPickerDefaultDayStyle._({
+  const CalendarPickerDefaultDayStyle._({
     required super.textStyle,
   });
 
@@ -129,12 +129,12 @@ class CalendarMonthPickerDefaultDayStyle extends CalendarMonthPickerDayStyle {
   /// with default values for non-provided parameters.
   ///
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
-  factory CalendarMonthPickerDefaultDayStyle.withDynamicColor(
+  factory CalendarPickerDefaultDayStyle.withDynamicColor(
     BuildContext context, {
     TextStyle? textStyle,
   }) {
-    final TextStyle style = textStyle ?? calendarMonthPickerDefaultDayStyle;
-    return CalendarMonthPickerDefaultDayStyle(
+    final TextStyle style = textStyle ?? calendarPickerDefaultDayStyle;
+    return CalendarPickerDefaultDayStyle(
       textStyle: style.copyWith(
         color: CupertinoDynamicColor.maybeResolve(style.color, context),
       ),
@@ -142,35 +142,35 @@ class CalendarMonthPickerDefaultDayStyle extends CalendarMonthPickerDayStyle {
   }
 
   /// Creates a copy of the class with the provided parameters.
-  CalendarMonthPickerDefaultDayStyle? copyWith({
+  CalendarPickerDefaultDayStyle? copyWith({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerDefaultDayStyle(
+    return CalendarPickerDefaultDayStyle(
       textStyle: textStyle ?? this.textStyle,
     );
   }
 }
 
 /// A decoration class for the calendar's month picker selected day.
-class CalendarMonthPickerSelectedDayStyle
-    extends CalendarMonthPickerBackgroundCircledDayStyle {
+class CalendarPickerSelectedDayStyle
+    extends CalendarPickerBackgroundCircledDayStyle {
   /// Creates a calendar's month picker selected day decoration class
   /// with default values for non-provided parameters.
   ///
   /// [mainColor] is used only if any other color is not provided.
-  factory CalendarMonthPickerSelectedDayStyle({
+  factory CalendarPickerSelectedDayStyle({
     Color? mainColor,
     Color? backgroundCircleColor,
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerSelectedDayStyle._(
+    return CalendarPickerSelectedDayStyle._(
       textStyle: textStyle ??
-          calendarMonthPickerSelectedDayStyle.copyWith(color: mainColor),
+          calendarPickerSelectedDayStyle.copyWith(color: mainColor),
       backgroundCircleColor: backgroundCircleColor ?? mainColor?.withAlpha(30),
     );
   }
 
-  const CalendarMonthPickerSelectedDayStyle._({
+  const CalendarPickerSelectedDayStyle._({
     required super.textStyle,
     required super.backgroundCircleColor,
   });
@@ -181,16 +181,16 @@ class CalendarMonthPickerSelectedDayStyle
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
   ///
   /// [mainColor] is used only if any other color is not provided.
-  factory CalendarMonthPickerSelectedDayStyle.withDynamicColor(
+  factory CalendarPickerSelectedDayStyle.withDynamicColor(
     BuildContext context, {
     Color? mainColor,
     TextStyle? textStyle,
     CupertinoDynamicColor? backgroundCircleColor,
   }) {
-    return CalendarMonthPickerSelectedDayStyle(
+    return CalendarPickerSelectedDayStyle(
       mainColor: mainColor,
       textStyle: textStyle ??
-          calendarMonthPickerSelectedDayStyle.copyWith(
+          calendarPickerSelectedDayStyle.copyWith(
             color: CupertinoDynamicColor.maybeResolve(mainColor, context),
           ),
       backgroundCircleColor: CupertinoDynamicColor.maybeResolve(
@@ -201,34 +201,34 @@ class CalendarMonthPickerSelectedDayStyle
   }
 
   /// Creates a copy of the class with the provided parameters.
-  CalendarMonthPickerSelectedDayStyle? copyWith({
+  CalendarPickerSelectedDayStyle? copyWith({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerSelectedDayStyle(
+    return CalendarPickerSelectedDayStyle(
       textStyle: textStyle ?? this.textStyle,
     );
   }
 }
 
 /// A decoration class for the calendar's month picker selected current day.
-class CalendarMonthPickerSelectedCurrentDayStyle
-    extends CalendarMonthPickerBackgroundCircledDayStyle {
+class CalendarPickerSelectedCurrentDayStyle
+    extends CalendarPickerBackgroundCircledDayStyle {
   /// Creates a calendar's month picker selected current day decoration class
   /// with default values for non-provided parameters.
   ///
   /// [mainColor] is used only if any other color is not provided.
-  factory CalendarMonthPickerSelectedCurrentDayStyle({
+  factory CalendarPickerSelectedCurrentDayStyle({
     Color? mainColor,
     Color? backgroundCircleColor,
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerSelectedCurrentDayStyle._(
-      textStyle: textStyle ?? calendarMonthPickerSelectedCurrentDayStyle,
+    return CalendarPickerSelectedCurrentDayStyle._(
+      textStyle: textStyle ?? calendarPickerSelectedCurrentDayStyle,
       backgroundCircleColor: backgroundCircleColor ?? mainColor,
     );
   }
 
-  const CalendarMonthPickerSelectedCurrentDayStyle._({
+  const CalendarPickerSelectedCurrentDayStyle._({
     required super.textStyle,
     required super.backgroundCircleColor,
   });
@@ -239,15 +239,15 @@ class CalendarMonthPickerSelectedCurrentDayStyle
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
   ///
   /// [mainColor] is used only if any other color is not provided.
-  factory CalendarMonthPickerSelectedCurrentDayStyle.withDynamicColor(
+  factory CalendarPickerSelectedCurrentDayStyle.withDynamicColor(
     BuildContext context, {
     Color? mainColor,
     TextStyle? textStyle,
     CupertinoDynamicColor? backgroundCircleColor,
   }) {
     final TextStyle style =
-        textStyle ?? calendarMonthPickerSelectedCurrentDayStyle;
-    return CalendarMonthPickerSelectedCurrentDayStyle(
+        textStyle ?? calendarPickerSelectedCurrentDayStyle;
+    return CalendarPickerSelectedCurrentDayStyle(
       mainColor: mainColor,
       textStyle: style.copyWith(
         color: CupertinoDynamicColor.maybeResolve(style.color, context),
@@ -260,28 +260,28 @@ class CalendarMonthPickerSelectedCurrentDayStyle
   }
 
   /// Creates a copy of the class with the provided parameters.
-  CalendarMonthPickerSelectedCurrentDayStyle? copyWith({
+  CalendarPickerSelectedCurrentDayStyle? copyWith({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerSelectedCurrentDayStyle(
+    return CalendarPickerSelectedCurrentDayStyle(
       textStyle: textStyle ?? this.textStyle,
     );
   }
 }
 
 /// A decoration class for the calendar's month picker current day.
-class CalendarMonthPickerCurrentDayStyle extends CalendarMonthPickerDayStyle {
+class CalendarPickerCurrentDayStyle extends CalendarPickerDayStyle {
   /// Creates a calendar's month picker current day decoration class
   /// with default values for non-provided parameters.
-  factory CalendarMonthPickerCurrentDayStyle({
+  factory CalendarPickerCurrentDayStyle({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerCurrentDayStyle._(
-      textStyle: textStyle ?? calendarMonthPickerCurrentDayStyle,
+    return CalendarPickerCurrentDayStyle._(
+      textStyle: textStyle ?? calendarPickerCurrentDayStyle,
     );
   }
 
-  const CalendarMonthPickerCurrentDayStyle._({
+  const CalendarPickerCurrentDayStyle._({
     required super.textStyle,
   });
 
@@ -291,13 +291,13 @@ class CalendarMonthPickerCurrentDayStyle extends CalendarMonthPickerDayStyle {
   /// Applies the [CupertinoDynamicColor.resolve] method for colors.
   ///
   /// [mainColor] is used only if any other color is not provided.
-  factory CalendarMonthPickerCurrentDayStyle.withDynamicColor(
+  factory CalendarPickerCurrentDayStyle.withDynamicColor(
     BuildContext context, {
     Color? mainColor,
     TextStyle? textStyle,
   }) {
-    final TextStyle style = textStyle ?? calendarMonthPickerCurrentDayStyle;
-    return CalendarMonthPickerCurrentDayStyle(
+    final TextStyle style = textStyle ?? calendarPickerCurrentDayStyle;
+    return CalendarPickerCurrentDayStyle(
       textStyle: style.copyWith(
         color: CupertinoDynamicColor.maybeResolve(
           style.color ?? mainColor,
@@ -308,10 +308,10 @@ class CalendarMonthPickerCurrentDayStyle extends CalendarMonthPickerDayStyle {
   }
 
   /// Creates a copy of the class with the provided parameters.
-  CalendarMonthPickerCurrentDayStyle? copyWith({
+  CalendarPickerCurrentDayStyle? copyWith({
     TextStyle? textStyle,
   }) {
-    return CalendarMonthPickerCurrentDayStyle(
+    return CalendarPickerCurrentDayStyle(
       textStyle: textStyle ?? this.textStyle,
     );
   }
