@@ -20,6 +20,7 @@ class CupertinoCalendarPicker extends StatefulWidget {
     required this.onDateChanged,
     required this.onTimeChanged,
     required this.onDisplayedMonthChanged,
+    required this.onDisplayedWeekChanged,
     required this.onYearPickerChanged,
     required this.weekdayDecoration,
     required this.monthPickerDecoration,
@@ -45,6 +46,7 @@ class CupertinoCalendarPicker extends StatefulWidget {
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<DateTime> onTimeChanged;
   final ValueChanged<DateTime> onDisplayedMonthChanged;
+  final ValueChanged<DateTime> onDisplayedWeekChanged;
   final ValueChanged<DateTime> onYearPickerChanged;
   final CalendarWeekdayDecoration weekdayDecoration;
   final CalendarMonthPickerDecoration monthPickerDecoration;
@@ -209,7 +211,7 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
       );
       if (!isCurrentWeek) {
         _currentDate = DateTime(weekDate.year, weekDate.month, weekDate.day);
-        widget.onDisplayedMonthChanged(_currentDate);
+        widget.onDisplayedWeekChanged(_currentDate);
       }
     });
   }

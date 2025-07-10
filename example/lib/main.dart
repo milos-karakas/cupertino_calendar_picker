@@ -27,11 +27,6 @@ class _ExampleAppState extends State<ExampleApp> {
   void initState() {
     super.initState();
     _now = DateTime.now();
-    _now = _now.copyWith(
-      millisecond: 0,
-      microsecond: 0,
-      isUtc: false,
-    );
     _selectedDateTime = _now;
     _selectedTime = TimeOfDay.fromDateTime(_now);
     _minimumDateTime = _now.subtract(const Duration(days: 40));
