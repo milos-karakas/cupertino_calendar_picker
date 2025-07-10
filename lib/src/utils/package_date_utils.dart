@@ -73,24 +73,36 @@ abstract final class PackageDateUtils {
     }
   }
 
-  static bool isSameWeek(DateTime a, DateTime b) {
-    if (a.year == b.year && a.month == b.month && a.day == b.day) {
-      return true;
+  static bool isSameWeek(
+    DateTime a,
+    DateTime b,
+    int firstDayOfWeekIndex,
+  ) {
+    if (firstDayOfWeekIndex < 0 || firstDayOfWeekIndex > 6) {
+      throw ArgumentError(
+        'firstDayOfWeekIndex must be between 0 and 6 '
+        'where 0 represents Sunday and 6 Saturday',
+      );
     }
 
-    final DateTime earlierDate = b.isAfter(a) ? a : b;
-    final DateTime laterDate = b.isAfter(a) ? b : a;
+    // DateTime weekday is [1..7] for [Monday..Sunday]
+    final int normalizedIndex =
+        firstDayOfWeekIndex == 0 ? 7 : firstDayOfWeekIndex;
 
-    final int differenceInDays = laterDate.difference(earlierDate).inDays;
-    if (differenceInDays >= 7) {
-      return false;
-    }
+    final DateTime startOfWeekA = startOfWeek(a, normalizedIndex);
+    final DateTime startOfWeekB = startOfWeek(b, normalizedIndex);
 
-    final int weekDayDifference = laterDate.weekday - earlierDate.weekday;
-    if (weekDayDifference <= 0) {
-      return false;
-    }
+    // Compare the start of the weeks
+    return startOfWeekA.year == startOfWeekB.year &&
+        startOfWeekA.month == startOfWeekB.month &&
+        startOfWeekA.day == startOfWeekB.day;
+  }
 
-    return true;
+  // Normalize dates to the start of their respective weeks
+  static DateTime startOfWeek(DateTime date, int firstDay) {
+    // Calculate days to subtract to reach the first day of the week
+    int daysToSubtract = (date.weekday - firstDay) % 7;
+    if (daysToSubtract < 0) daysToSubtract += 7; // Handle negative modulo
+    return DateTime(date.year, date.month, date.day - daysToSubtract);
   }
 }

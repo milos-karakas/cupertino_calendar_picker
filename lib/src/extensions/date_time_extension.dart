@@ -13,15 +13,13 @@ extension PackageDateTimeExtension on DateTime {
     return DateTime(year, month, day, newHour ?? hour, newMinute ?? minute);
   }
 
-  bool isSameWeekAs(DateTime other) {
-    return PackageDateUtils.isSameWeek(this, other);
+  bool isSameWeekAs(DateTime other, int firstDayOfWeekIndex) {
+    return PackageDateUtils.isSameWeek(this, other, firstDayOfWeekIndex);
   }
 
-  /// Number of days since December 31st the previous year.
-  /// Jan 1st ordinal date is 1
-  /// December 31st ordinal date is 365 or 366 depending on the leap year
+  /// Calculate ordinal date [https://en.wikipedia.org/wiki/Ordinal_date]
   int get ordinalDate {
-    const List<int> offsets = <int>[
+    const List<int> monthOffsets = <int>[
       0,
       31,
       59,
@@ -36,11 +34,12 @@ extension PackageDateTimeExtension on DateTime {
       334,
     ];
 
-    return offsets[month - 1] + day + (isLeapYear && month > 2 ? 1 : 0);
+    return monthOffsets[month - 1] + day + (isLeapYear && month > 2 ? 1 : 0);
   }
 
   bool get isLeapYear => year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 
+  /// Calculate week number [https://en.wikipedia.org/wiki/ISO_week_date]
   int weekNumber(int firstDayIndex) {
     final int adjustedWeekday = (weekday - firstDayIndex + 7) % 7 + 1;
 

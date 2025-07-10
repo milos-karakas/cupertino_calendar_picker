@@ -105,9 +105,9 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   @override
   void didUpdateWidget(CupertinoCalendarPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final DateTime initialMonth = widget.initialDate;
-    final DateTime oldInitialMonth = oldWidget.initialDate;
-    if (initialMonth != oldInitialMonth && initialMonth != _currentDate) {
+    final DateTime initialDate = widget.initialDate;
+    final DateTime oldInitialDate = oldWidget.initialDate;
+    if (initialDate != oldInitialDate && initialDate != _currentDate) {
       // We can't interrupt this widget build with a scroll, so do it next frame
       WidgetsBinding.instance.addPostFrameCallback(
         (Duration timeStamp) => switch (widget.mode) {
@@ -145,13 +145,21 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   /// Earliest allowable week.
   bool get _isDisplayingFirstWeek {
     final DateTime minimumDate = widget.minimumDateTime;
-    return _currentDate.isSameWeekAs(minimumDate);
+    return _currentDate.isSameWeekAs(
+      minimumDate,
+      widget.firstDayOfWeekIndex ??
+          context.materialLocalization.firstDayOfWeekIndex,
+    );
   }
 
   /// Latest allowable week.
   bool get _isDisplayingLastWeek {
     final DateTime maximumDate = widget.maximumDateTime;
-    return _currentDate.isSameWeekAs(maximumDate);
+    return _currentDate.isSameWeekAs(
+      maximumDate,
+      widget.firstDayOfWeekIndex ??
+          context.materialLocalization.firstDayOfWeekIndex,
+    );
   }
 
   void _initialisePageController() {
@@ -194,7 +202,11 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
       final DateTime minimumDate = widget.minimumDateTime;
       final DateTime weekDate =
           DateUtils.addDaysToDate(minimumDate, weekPage * 7);
-      final bool isCurrentWeek = _currentDate.isSameWeekAs(weekDate);
+      final bool isCurrentWeek = _currentDate.isSameWeekAs(
+        weekDate,
+        widget.firstDayOfWeekIndex ??
+            context.materialLocalization.firstDayOfWeekIndex,
+      );
       if (!isCurrentWeek) {
         _currentDate = DateTime(weekDate.year, weekDate.month, weekDate.day);
         widget.onDisplayedMonthChanged(_currentDate);
