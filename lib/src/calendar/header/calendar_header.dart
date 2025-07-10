@@ -56,7 +56,12 @@ class _CalendarHeaderState extends State<CalendarHeader> {
         const SizedBox(width: 20.0),
         GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: _handleYearPickerStateChange,
+          onTap: switch (widget.mode) {
+            CupertinoCalendarMode.date ||
+            CupertinoCalendarMode.dateTime =>
+              _handleYearPickerStateChange,
+            _ => null,
+          },
           child: Row(
             children: <Widget>[
               AnimatedDefaultTextStyle(
