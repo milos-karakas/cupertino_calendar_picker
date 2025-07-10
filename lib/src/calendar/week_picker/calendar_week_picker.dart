@@ -56,7 +56,7 @@ class CalendarWeekPicker extends StatefulWidget {
   /// The decoration class for each day type.
   final CalendarWeekPickerDecoration decoration;
 
-  /// The main color of the month picker.
+  /// The main color of the week picker.
   final Color mainColor;
 
   /// The index of the first day of the week, where 0 represents Sunday.
@@ -164,6 +164,8 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
     final int itemCount = PackageDateUtils.weekDelta(
           widget.minimumDate,
           widget.maximumDate,
+          widget.firstDayOfWeekIndex ??
+              context.materialLocalization.firstDayOfWeekIndex,
         ) +
         1;
 
@@ -171,26 +173,34 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
       child: PageView.builder(
         controller: widget.weekPageController,
         itemBuilder: (BuildContext context, int index) {
-          const double rowSize = calendarMonthPickerOtherRowsSize;
+          const double rowSize = calendarWeekPickerRowSize;
           final Iterable<Widget> days = _days(
             context,
             index: index,
-            backgroundCircleSize: rowSize > calendarMonthPickerDayMaxSize
-                ? calendarMonthPickerDayMaxSize
+            backgroundCircleSize: rowSize > calendarWeekPickerDayMaxSize
+                ? calendarWeekPickerDayMaxSize
                 : rowSize,
           );
 
-          return GridView.custom(
-            padding: const EdgeInsets.symmetric(
-              horizontal: calendarMonthPickerHorizontalPadding,
-            ),
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate:
-                const CalendarMonthPickerGridDelegate(rowSize: rowSize),
-            childrenDelegate: SliverChildListDelegate(
-              days.toList(),
-              addRepaintBoundaries: false,
-            ),
+          return LayoutBuilder(
+            builder: (_, BoxConstraints constraints) {
+              const int columnCount = DateTime.daysPerWeek;
+              final double tileWidth = (constraints.maxWidth -
+                      2 * calendarWeekPickerHorizontalPadding) /
+                  columnCount;
+
+              return ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: calendarWeekPickerHorizontalPadding,
+                ),
+                physics: const NeverScrollableScrollPhysics(),
+                itemExtent: tileWidth,
+                itemCount: days.length,
+                scrollDirection: Axis.horizontal,
+                addRepaintBoundaries: false,
+                itemBuilder: (_, int index) => days.elementAt(index),
+              );
+            },
           );
         },
         itemCount: itemCount,

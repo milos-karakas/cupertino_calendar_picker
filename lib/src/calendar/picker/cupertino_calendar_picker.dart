@@ -83,27 +83,23 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   void initState() {
     super.initState();
     _currentDate = widget.initialDate;
-
-    final int delta = switch (widget.mode) {
-      CupertinoCalendarMode.date ||
-      CupertinoCalendarMode.dateTime =>
-        DateUtils.monthDelta(
-          widget.minimumDateTime,
-          _currentDate,
-        ),
-      CupertinoCalendarMode.dateWeek ||
-      CupertinoCalendarMode.dateTimeWeek =>
-        PackageDateUtils.weekDelta(
-          widget.minimumDateTime,
-          _currentDate,
-        ),
-    };
-
-    _pageController = PageController(initialPage: delta);
     _previousViewMode = CupertinoCalendarViewMode.monthPicker;
     _viewMode = CupertinoCalendarViewMode.monthPicker;
     _timePickerKey = GlobalKey();
     _selectedDateTime = widget.selectedDateTime;
+    if (widget.mode == CupertinoCalendarMode.date ||
+        widget.mode == CupertinoCalendarMode.dateTime) {
+      _initialisePageController();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.mode == CupertinoCalendarMode.dateWeek ||
+        widget.mode == CupertinoCalendarMode.dateTimeWeek) {
+      _initialisePageController();
+    }
   }
 
   @override
@@ -156,6 +152,27 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
   bool get _isDisplayingLastWeek {
     final DateTime maximumDate = widget.maximumDateTime;
     return _currentDate.isSameWeekAs(maximumDate);
+  }
+
+  void _initialisePageController() {
+    final int delta = switch (widget.mode) {
+      CupertinoCalendarMode.date ||
+      CupertinoCalendarMode.dateTime =>
+        DateUtils.monthDelta(
+          widget.minimumDateTime,
+          _currentDate,
+        ),
+      CupertinoCalendarMode.dateWeek ||
+      CupertinoCalendarMode.dateTimeWeek =>
+        PackageDateUtils.weekDelta(
+          widget.minimumDateTime,
+          _currentDate,
+          widget.firstDayOfWeekIndex ??
+              context.materialLocalization.firstDayOfWeekIndex,
+        ),
+    };
+
+    _pageController = PageController(initialPage: delta);
   }
 
   void _handleMonthPageChanged(int monthPage) {
@@ -256,7 +273,10 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
     final int weekPage = PackageDateUtils.weekDelta(
       widget.minimumDateTime,
       week,
-    ) + 1;
+      widget.firstDayOfWeekIndex ??
+          context.materialLocalization.firstDayOfWeekIndex,
+    );
+
     if (jump) {
       _pageController.jumpToPage(weekPage);
     } else {

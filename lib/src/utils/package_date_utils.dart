@@ -2,6 +2,8 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
+import 'package:cupertino_calendar_picker/src/extensions/date_time_extension.dart';
+
 abstract final class PackageDateUtils {
   static DateTime monthDateOnly(DateTime date) {
     return DateTime(date.year, date.month);
@@ -49,6 +51,7 @@ abstract final class PackageDateUtils {
   static int weekDelta(
     DateTime firstDate,
     DateTime secondDate,
+    int firstDayIndex,
   ) {
     DateTime laterDate = firstDate;
     DateTime earlierDate = secondDate;
@@ -57,16 +60,17 @@ abstract final class PackageDateUtils {
       earlierDate = firstDate;
     }
 
-    // Number of weeks between 2 dates;
-    final int differenceInDays = laterDate.difference(earlierDate).inDays;
-    final int fullWeeksDifference = differenceInDays ~/ 7;
-    if (fullWeeksDifference == 0) {
-      return 0;
-    }
+    final int laterDateWeekNumber = laterDate.weekNumber(firstDayIndex);
+    final int earlierDateWeekNumber = earlierDate.weekNumber(firstDayIndex);
+    final int yearDifference = laterDate.year - earlierDate.year;
 
-    final int remainder = differenceInDays - (fullWeeksDifference * 7);
-    final bool addWeek = remainder % 7 != 0;
-    return fullWeeksDifference + (addWeek ? 1 : 0);
+    if (yearDifference == 0) {
+      return laterDateWeekNumber - earlierDateWeekNumber;
+    } else {
+      return laterDateWeekNumber +
+          (53 - earlierDateWeekNumber) +
+          (yearDifference - 1) * 53;
+    }
   }
 
   static bool isSameWeek(DateTime a, DateTime b) {

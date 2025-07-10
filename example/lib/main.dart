@@ -119,6 +119,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 timeLabel: 'Ends',
                 mode: CupertinoCalendarMode.dateTimeWeek,
                 onDateTimeChanged: _onDateTimeChanged,
+                //firstDayOfWeekIndex: 1,
               ),
             ),
             const Spacer(),
