@@ -13,14 +13,14 @@ The package provides a sleek and stylish cupertino calendar widgets designed to 
 * **iOS Style**: The cupertino calendar picker follows the design principles of iOS, ensuring consistency and familiarity for iOS users.
 * **Smooth Animations**: Enjoy fluid animations that enhance the overall look and feel of the calendar, providing a polished user experience.
 * **Customizable**: Easily customize the appearance of the calendar to match your app's theme and branding.
-* **Intuitive Interactions**: Users can effortlessly navigate through years, months and interact with the calendar thanks to its intuitive design.
+* **Intuitive Interactions**: Users can effortlessly navigate through years, months, weeks and interact with the calendar thanks to its intuitive design.
 
 ## Getting started
 
 In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
-  cupertino_calendar_picker: ^2.2.6
+  cupertino_calendar_picker: ^3.0.0
 ```
 
 Import it:
@@ -69,6 +69,24 @@ SizedBox(
     currentDateTime: DateTime(2024, 8, 15),
     timeLabel: 'Ends',
     mode: CupertinoCalendarMode.dateTime,
+  ),
+),
+```
+
+`CupertinoCalendar` widget can also show a weekly view.
+
+#### Usage Example
+
+```dart
+SizedBox(
+  width: 350,
+  child: CupertinoCalendar(
+    minimumDateTime: DateTime(2024, 7, 10),
+    maximumDateTime: DateTime(2025, 7, 10),
+    initialDateTime: DateTime(2024, 8, 15, 9, 41),
+    currentDateTime: DateTime(2024, 8, 15),
+    timeLabel: 'Ends',
+    mode: CupertinoCalendarMode.dateTimeWeek,
   ),
 ),
 ```
@@ -128,6 +146,7 @@ This package also includes two functions for displaying pickers from your widget
 
 The `showCupertinoCalendarPicker` function displays a calendar picker around your widget.
 - From version 2.0.0, you can specify the `CupertinoCalendarMode` to allow selection of both date and time.
+in a month or week view.
 
 #### Usage Example
 
