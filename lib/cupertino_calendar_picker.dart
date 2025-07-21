@@ -16,6 +16,7 @@ export 'src/src.dart'
         CalendarPickerSelectedCurrentDayStyle,
         CalendarPickerCurrentDayStyle,
         CalendarMonthPickerDecoration,
+        CalendarWeekPickerDecoration,
         CalendarFooterDecoration,
         PickerButtonDecoration,
         CalendarWeekdayDecoration,
