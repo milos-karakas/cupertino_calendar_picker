@@ -3,6 +3,5 @@
 // found in the LICENSE file.
 
 export '../day/day.dart';
-export 'calendar_month_picker.dart';
-export 'calendar_month_picker_decoration.dart';
-export 'delegates/delegates.dart';
+export 'calendar_week_picker.dart';
+export 'calendar_week_picker_decoration.dart';

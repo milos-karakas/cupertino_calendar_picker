@@ -111,6 +111,8 @@ class _CupertinoCalendarOverlayState extends State<CupertinoCalendarOverlay> {
     double height = switch (widget.mode) {
       CupertinoCalendarMode.date => calendarDatePickerHeight,
       CupertinoCalendarMode.dateTime => calendarDateTimePickerHeight,
+      CupertinoCalendarMode.dateWeek => calendarDateWeekPickerHeight,
+      CupertinoCalendarMode.dateTimeWeek => calendarDateTimeWeekPickerHeight,
     };
     final bool withActions =
         widget.actions != null && widget.actions!.isNotEmpty;

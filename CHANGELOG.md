@@ -1,3 +1,24 @@
+## 3.0.0
+
+**Major Updates**:
+* New `CupertinoCalendarMode` parameter with `dateWeek` and `dateTimeWeek` options, enabling the calendar to select both date and time within a week view.
+
+**Minor Updates**:
+* The `CupertinoCalendarPicker` updates:
+* * The `onDisplayedWeekChanged` has been added.
+* * The `weekPickerDecoration` has been added.
+
+**Breaking Changes**:
+* `CalendarMonthPickerDayStyle` has been renamed to `CalendarPickerDayStyle`.
+* `CalendarMonthPickerBackgroundCircledDayStyle` has been renamed to `CalendarPickerBackgroundCircledDayStyle`.
+* `CalendarMonthPickerDisabledDayStyle` has been renamed to `CalendarPickerDisabledDayStyle`.
+* `CalendarMonthPickerDefaultDayStyle` has been renamed to `CalendarPickerDefaultDayStyle`.
+* `CalendarPickerDefaultDayStyle` has been renamed to `CalendarPickerSelectedDayStyle`.
+* `CalendarMonthPickerSelectedCurrentDayStyle` has been renamed to `CalendarPickerSelectedCurrentDayStyle`.
+* `CalendarMonthPickerCurrentDayStyle` has been renamed to `CalendarPickerCurrentDayStyle`.
+* `CalendarHeader`'s `onPreviousMonthIconTapped` has been renamed to `onPreviousSegmentIconTapped`.
+* `CalendarHeader`'s `onNextMonthIconTapped` has been renamed to `onNextSegmentIconTapped`.
+
 ## 2.2.6
 
 * Added `selectableDayPredicate` callback parameter to the calendar, allowing certain dates to be disabled. (Thanks to [@Menelphor](https://github.com/philip-soft/cupertino_calendar_picker/pull/54))

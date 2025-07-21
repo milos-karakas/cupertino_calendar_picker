@@ -17,5 +17,18 @@ enum CupertinoCalendarMode {
   ///
   /// In this mode, users can select both a date (year, month, day) and a time
   /// (hours, minutes), providing a complete date-time selection experience.
-  dateTime;
+  dateTime,
+
+  /// The calendar is in date-only mode showing only one week.
+  ///
+  /// In this mode, users can only select a date (year, month and day) from one
+  /// week without any time selection.
+  dateWeek,
+
+  /// The calendar is in date-time mode showing only one week.
+  ///
+  /// In this mode, users can select both a date (year, month, day) from one
+  /// week and a time (hours, minutes), providing a complete date-time
+  /// selection experience.
+  dateTimeWeek;
 }

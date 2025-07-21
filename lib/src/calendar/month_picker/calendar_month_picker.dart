@@ -14,7 +14,6 @@ class CalendarMonthPicker extends StatefulWidget {
   CalendarMonthPicker({
     required this.monthPageController,
     required this.onMonthPageChanged,
-    required DateTime displayedMonth,
     required DateTime currentDate,
     required DateTime minimumDate,
     required DateTime maximumDate,
@@ -28,8 +27,7 @@ class CalendarMonthPicker extends StatefulWidget {
   })  : minimumDate = DateUtils.dateOnly(minimumDate),
         maximumDate = DateUtils.dateOnly(maximumDate),
         currentDate = DateUtils.dateOnly(currentDate),
-        selectedDate = DateUtils.dateOnly(selectedDate),
-        displayedMonth = DateUtils.dateOnly(displayedMonth);
+        selectedDate = DateUtils.dateOnly(selectedDate);
 
   final PageController monthPageController;
   final ValueChanged<int> onMonthPageChanged;
@@ -57,9 +55,6 @@ class CalendarMonthPicker extends StatefulWidget {
   ///
   /// This date must be on or after the [minimumDate].
   final DateTime maximumDate;
-
-  /// The month whose days are displayed by this picker.
-  final DateTime displayedMonth;
 
   /// The decoration class for each day type.
   final CalendarMonthPickerDecoration decoration;
@@ -124,7 +119,7 @@ class CalendarMonthPickerState extends State<CalendarMonthPicker> {
       if (day < 1) {
         yield const SizedBox();
       } else {
-        late CalendarMonthPickerDayStyle style;
+        late CalendarPickerDayStyle style;
 
         final DateTime date = DateTime(year, month, day);
         final bool isCurrentDay = DateUtils.isSameDay(widget.currentDate, date);
@@ -140,33 +135,33 @@ class CalendarMonthPickerState extends State<CalendarMonthPicker> {
 
         if (isDisabledDay) {
           style = decoration.disabledDayStyle ??
-              CalendarMonthPickerDisabledDayStyle.withDynamicColor(context);
+              CalendarPickerDisabledDayStyle.withDynamicColor(context);
         } else if (isCurrentDay) {
           style = decoration.currentDayStyle ??
-              CalendarMonthPickerCurrentDayStyle.withDynamicColor(
+              CalendarPickerCurrentDayStyle.withDynamicColor(
                 context,
                 mainColor: widget.mainColor,
               );
 
           if (isSelectedDay) {
             style = decoration.selectedCurrentDayStyle ??
-                CalendarMonthPickerSelectedCurrentDayStyle.withDynamicColor(
+                CalendarPickerSelectedCurrentDayStyle.withDynamicColor(
                   context,
                   mainColor: widget.mainColor,
                 );
           }
         } else if (isSelectedDay) {
           style = decoration.selectedDayStyle ??
-              CalendarMonthPickerSelectedDayStyle.withDynamicColor(
+              CalendarPickerSelectedDayStyle.withDynamicColor(
                 context,
                 mainColor: widget.mainColor,
               );
         } else {
           style = decoration.defaultDayStyle ??
-              CalendarMonthPickerDefaultDayStyle.withDynamicColor(context);
+              CalendarPickerDefaultDayStyle.withDynamicColor(context);
         }
 
-        final Widget dayWidget = CalendarMonthPickerDay(
+        final Widget dayWidget = CalendarPickerDay(
           dayDate: date,
           onDaySelected: isDisabledDay ? null : widget.onChanged,
           style: style,

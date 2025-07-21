@@ -26,8 +26,10 @@ class CupertinoCalendar extends StatefulWidget {
     this.selectableDayPredicate,
     this.currentDateTime,
     this.onDisplayedMonthChanged,
+    this.onDisplayedWeekChanged,
     this.weekdayDecoration,
     this.monthPickerDecoration,
+    this.weekPickerDecoration,
     this.headerDecoration,
     this.footerDecoration,
     this.timeLabel,
@@ -99,13 +101,21 @@ class CupertinoCalendar extends StatefulWidget {
   final ValueChanged<DateTime>? onDateSelected;
 
   /// A callback that is triggered when the user navigates to a different month in the calendar.
+  /// Triggered only when [mode] is set to [CupertinoCalendarMode.date] or [CupertinoCalendarMode.dateTime]
   final ValueChanged<DateTime>? onDisplayedMonthChanged;
+
+  /// A callback that is triggered when the user navigates to a different week in the calendar
+  /// Triggered only when [mode] is set to [CupertinoCalendarMode.dateWeek] or [CupertinoCalendarMode.dateTimeWeek]
+  final ValueChanged<DateTime>? onDisplayedWeekChanged;
 
   /// Custom decoration for the weekdays' row in the calendar.
   final CalendarWeekdayDecoration? weekdayDecoration;
 
   /// Custom decoration for the month picker view.
   final CalendarMonthPickerDecoration? monthPickerDecoration;
+
+  /// Custom decoration for the week picker view.
+  final CalendarWeekPickerDecoration? weekPickerDecoration;
 
   /// Custom decoration for the header of the calendar.
   final CalendarHeaderDecoration? headerDecoration;
@@ -171,7 +181,7 @@ class CupertinoCalendar extends StatefulWidget {
 }
 
 class _CupertinoCalendarState extends State<CupertinoCalendar> {
-  late DateTime _currentlyDisplayedMonthDate;
+  late DateTime _currentlyDisplayedMonthOrWeekDate;
   late DateTime _selectedDateTime;
 
   @override
@@ -190,8 +200,11 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
 
   void _initializeInitialDate() {
     final DateTime initialDateTime = widget.initialDateTime ?? DateTime.now();
-    _currentlyDisplayedMonthDate =
-        PackageDateUtils.monthDateOnly(initialDateTime);
+    _currentlyDisplayedMonthOrWeekDate =
+        widget.mode == CupertinoCalendarMode.date ||
+                widget.mode == CupertinoCalendarMode.dateTime
+            ? PackageDateUtils.monthDateOnly(initialDateTime)
+            : PackageDateUtils.dayMonthYearOnly(initialDateTime);
     _selectedDateTime = initialDateTime;
   }
 
@@ -223,17 +236,36 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
 
   void _handleCalendarMonthChange(DateTime newMonthDate) {
     final DateTime displayedMonth = PackageDateUtils.monthDateOnly(
-      _currentlyDisplayedMonthDate,
+      _currentlyDisplayedMonthOrWeekDate,
     );
     final bool monthChanged = !DateUtils.isSameMonth(
       displayedMonth,
       newMonthDate,
     );
     if (monthChanged) {
-      _currentlyDisplayedMonthDate = PackageDateUtils.monthDateOnly(
+      _currentlyDisplayedMonthOrWeekDate = PackageDateUtils.monthDateOnly(
         newMonthDate,
       );
-      widget.onDisplayedMonthChanged?.call(_currentlyDisplayedMonthDate);
+      widget.onDisplayedMonthChanged?.call(_currentlyDisplayedMonthOrWeekDate);
+    }
+  }
+
+  void _handleCalendarWeekChange(DateTime newWeekDate) {
+    final DateTime displayedWeek = PackageDateUtils.dayMonthYearOnly(
+      _currentlyDisplayedMonthOrWeekDate,
+    );
+
+    final bool weekChanged = !displayedWeek.isSameWeekAs(
+      newWeekDate,
+      widget.firstDayOfWeekIndex ??
+          context.materialLocalization.firstDayOfWeekIndex,
+    );
+
+    if (weekChanged) {
+      _currentlyDisplayedMonthOrWeekDate = PackageDateUtils.dayMonthYearOnly(
+        newWeekDate,
+      );
+      widget.onDisplayedWeekChanged?.call(_currentlyDisplayedMonthOrWeekDate);
     }
   }
 
@@ -258,6 +290,8 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
     double height = switch (widget.mode) {
       CupertinoCalendarMode.date => calendarDatePickerHeight,
       CupertinoCalendarMode.dateTime => calendarDateTimePickerHeight,
+      CupertinoCalendarMode.dateWeek => calendarDateWeekPickerHeight,
+      CupertinoCalendarMode.dateTimeWeek => calendarDateTimeWeekPickerHeight,
     };
     final List<CupertinoCalendarAction>? actions = widget.actions;
     final bool withActions = actions != null && actions.isNotEmpty;
@@ -276,7 +310,7 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
         maxWidth: maxWidth,
       ),
       child: CupertinoCalendarPicker(
-        initialMonth: _currentlyDisplayedMonthDate,
+        initialDate: _currentlyDisplayedMonthOrWeekDate,
         currentDateTime: widget.currentDateTime ?? DateTime.now(),
         minimumDateTime: widget.minimumDateTime,
         maximumDateTime: widget.maximumDateTime,
@@ -286,12 +320,18 @@ class _CupertinoCalendarState extends State<CupertinoCalendar> {
         onDateChanged: _onDateChanged,
         onTimeChanged: _onTimeChanged,
         onDisplayedMonthChanged: _handleCalendarMonthChange,
+        onDisplayedWeekChanged: _handleCalendarWeekChange,
         onYearPickerChanged: _handleCalendarDateChange,
         mainColor: widget.mainColor,
         weekdayDecoration: widget.weekdayDecoration ??
             CalendarWeekdayDecoration.withDynamicColor(context),
         monthPickerDecoration: widget.monthPickerDecoration ??
             CalendarMonthPickerDecoration.withDynamicColor(
+              context,
+              mainColor: widget.mainColor,
+            ),
+        weekPickerDecoration: widget.weekPickerDecoration ??
+            CalendarWeekPickerDecoration.withDynamicColor(
               context,
               mainColor: widget.mainColor,
             ),

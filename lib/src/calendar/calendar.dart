@@ -11,4 +11,5 @@ export 'header/header.dart';
 export 'month_picker/month_picker.dart';
 export 'overlay/overlay.dart';
 export 'picker/picker.dart';
+export 'week_picker/week_picker.dart';
 export 'weekdays/weekdays.dart';
