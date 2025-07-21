@@ -2,8 +2,6 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker.dart';
-import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker_decoration.dart';
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -416,7 +414,6 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
                         monthPageController: _pageController,
                         onMonthPageChanged: _handleMonthPageChanged,
                         currentDate: widget.currentDateTime,
-                        displayedMonth: _currentDate,
                         minimumDate: widget.minimumDateTime,
                         maximumDate: widget.maximumDateTime,
                         selectableDayPredicate: widget.selectableDayPredicate,
@@ -432,9 +429,9 @@ class CupertinoCalendarPickerState extends State<CupertinoCalendarPicker> {
                         weekPageController: _pageController,
                         onWeekPageChanged: _handleWeekPageChanged,
                         currentDate: widget.currentDateTime,
-                        displayedWeek: _currentDate,
                         minimumDate: widget.minimumDateTime,
                         maximumDate: widget.maximumDateTime,
+                        selectableDayPredicate: widget.selectableDayPredicate,
                         selectedDate: widget.selectedDateTime,
                         onChanged: _onDateChanged,
                         decoration: widget.weekPickerDecoration,

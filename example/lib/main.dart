@@ -122,6 +122,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 minimumDateTime: _minimumDateTime,
                 maximumDateTime: _maximumDateTime,
                 initialDateTime: _selectedDateTime,
+                selectableDayPredicate: (date) => date.day % 2 == 0,
                 timeLabel: 'Ends',
                 mode: CupertinoCalendarMode.dateTimeWeek,
                 onDateTimeChanged: _onDateTimeChanged,

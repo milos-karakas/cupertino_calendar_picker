@@ -2,7 +2,6 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-import 'package:cupertino_calendar_picker/src/calendar/week_picker/calendar_week_picker_decoration.dart';
 import 'package:cupertino_calendar_picker/src/src.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +22,7 @@ class CalendarWeekPicker extends StatefulWidget {
     required this.decoration,
     required this.mainColor,
     required this.firstDayOfWeekIndex,
+    required this.selectableDayPredicate,
     super.key,
   })  : minimumDate = DateUtils.dateOnly(minimumDate),
         maximumDate = DateUtils.dateOnly(maximumDate),
@@ -42,6 +42,9 @@ class CalendarWeekPicker extends StatefulWidget {
 
   /// Called when the user picks a day.
   final ValueChanged<DateTime> onChanged;
+
+  /// A predicate that determines whether a day is selectable.
+  final SelectableDayPredicate? selectableDayPredicate;
 
   /// The earliest date the user is permitted to pick.
   ///
@@ -115,8 +118,9 @@ class CalendarWeekPickerState extends State<CalendarWeekPicker> {
         widget.selectedDate,
         date,
       );
-      final bool isDisabledDay =
-          date.isAfter(widget.maximumDate) || date.isBefore(widget.minimumDate);
+      final bool isDisabledDay = date.isAfter(widget.maximumDate) ||
+          date.isBefore(widget.minimumDate) ||
+          widget.selectableDayPredicate?.call(date) == false;
 
       final CalendarWeekPickerDecoration decoration = widget.decoration;
 
